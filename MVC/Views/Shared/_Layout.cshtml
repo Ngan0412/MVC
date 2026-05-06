@@ -3,29 +3,75 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MVC</title>
+    <title>@ViewData["Title"] - C-ow2</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVC.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+    <header class="border-bottom bg-white sticky-top shadow-sm">
+        <!-- Top Bar: Quick Links -->
+        <div class="bg-dark text-white py-1 d-none d-md-block">
+            <div class="container d-flex justify-content-between small">
+                <span>Free shipping on orders over $50!</span>
+                <div>
+                    <a href="#" class="text-white text-decoration-none me-3">Track Order</a>
+                    <a href="#" class="text-white text-decoration-none">Help</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light py-3">
+            <div class="container">
+                <!-- Brand Logo -->
+                <a class="navbar-brand fw-bold fs-3" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="text-primary">C</span>-ow2
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRes">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+                <!-- Menu Links -->
+                <div class="collapse navbar-collapse" id="navRes">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Shop" asp-action="Index">New Arrivals</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="catDrop" data-bs-toggle="dropdown">Categories</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-id="electronics">Electronics</a></li>
+                                <li><a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-id="fashion">Fashion</a></li>
+                            </ul>
                         </li>
                     </ul>
+
+                    <!-- Search Bar -->
+                    <form class="d-flex me-lg-3 my-2 my-lg-0" asp-controller="Shop" asp-action="Search" method="get">
+                        <div class="input-group">
+                            <input class="form-control" type="search" name="query" placeholder="Search products..." aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Icons & Auth -->
+                    <div class="d-flex align-items-center">
+                        @* Partial for Login/Logout status *@
+                        @* <partial name="_LoginPartial" /> *@
+
+                        <!-- Shopping Cart -->
+                        <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-dark position-relative ms-2">
+                            <i class="bi bi-cart3"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                @* Logic to show cart count from Session/Database *@
+                                0
+                            </span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -36,9 +82,66 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="bg-dark text-white pt-5 pb-4 mt-5">
+        <div class="container text-center text-md-start">
+            <div class="row text-center text-md-start">
+
+                <!-- Company Info -->
+                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold text-primary">C-ow2</h5>
+                    <p>Your one-stop destination for the latest in electronics and fashion. Quality guaranteed, delivered to your doorstep.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold">Shop</h5>
+                    <p><a asp-controller="Shop" asp-action="Index" class="text-white text-decoration-none">All Products</a></p>
+                    <p><a asp-controller="Shop" asp-action="Category" asp-route-id="featured" class="text-white text-decoration-none">Featured</a></p>
+                    <p><a asp-controller="Home" asp-action="Privacy" class="text-white text-decoration-none">Privacy Policy</a></p>
+                </div>
+
+                <!-- Customer Service -->
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold">Support</h5>
+                    <p><a href="#" class="text-white text-decoration-none">My Account</a></p>
+                    <p><a href="#" class="text-white text-decoration-none">Shipping Rates</a></p>
+                    <p><a href="#" class="text-white text-decoration-none">Help & FAQ</a></p>
+                </div>
+
+                <!-- Contact & Social -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h5 class="text-uppercase mb-4 fw-bold">Contact</h5>
+                    <p><i class="bi bi-house-door-fill me-2"></i> 123 Tech Lane, NY, US</p>
+                    <p><i class="bi bi-envelope-fill me-2"></i> support@eshop.com</p>
+                    <p><i class="bi bi-telephone-fill me-2"></i> +1 234 567 890</p>
+
+                    <div class="mt-4">
+                        <a href="#" class="text-white me-3 fs-4"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3 fs-4"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white me-3 fs-4"><i class="bi bi-twitter-x"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mb-4 mt-5">
+
+            <!-- Bottom Bar: Copyright & Payments -->
+            <div class="row align-items-center">
+                <div class="col-md-7 col-lg-8">
+                    <p>
+                        © @DateTime.Now.Year All rights reserved by:
+                        <a href="#" class="text-primary text-decoration-none"><strong>C-ow2 Inc.</strong></a>
+                    </p>
+                </div>
+                <div class="col-md-5 col-lg-4">
+                    <div class="text-center text-md-end">
+                        <span class="me-2 small text-uppercase">We Accept:</span>
+                        <i class="bi bi-credit-card-2-back fs-3 me-2"></i>
+                        <i class="bi bi-paypal fs-3 me-2"></i>
+                        <i class="bi bi-apple fs-3"></i>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

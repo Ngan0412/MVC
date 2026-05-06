@@ -2,7 +2,113 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<section id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active" style="background: #f8f9fa; height: 500px;">
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-md-6">
+                        <h1 class="display-3 fw-bold">Upgrade Your <span class="text-primary">Style</span></h1>
+                        <p class="lead">Discover the latest trends in tech and fashion with exclusive deals up to 40% off.</p>
+                        <a asp-controller="Shop" asp-action="Index" class="btn btn-primary btn-lg px-5">Shop Now</a>
+                    </div>
+                    <div class="col-md-6 d-none d-md-block text-center">
+                        <!-- Replace with a product image -->
+                        <img src="images/cow.jpg" class="img-fluid rounded" alt="Hero Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2. Features/Trust Signals -->
+<div class="container mb-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-3">
+            <div class="p-3 border rounded bg-light">
+                <i class="bi bi-truck fs-1 text-primary"></i>
+                <h6 class="mt-3">Free Delivery</h6>
+                <p class="small text-muted">Orders over $50</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 border rounded bg-light">
+                <i class="bi bi-shield-check fs-1 text-primary"></i>
+                <h6 class="mt-3">Secure Payment</h6>
+                <p class="small text-muted">100% protected</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 border rounded bg-light">
+                <i class="bi bi-arrow-left-right fs-1 text-primary"></i>
+                <h6 class="mt-3">90 Days Return</h6>
+                <p class="small text-muted">Hassle-free returns</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 border rounded bg-light">
+                <i class="bi bi-headset fs-1 text-primary"></i>
+                <h6 class="mt-3">24/7 Support</h6>
+                <p class="small text-muted">Dedicated team</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- 3. Featured Categories -->
+<section class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Popular Categories</h2>
+        <a asp-controller="Shop" asp-action="Categories" class="text-primary">View All</a>
+    </div>
+    <div class="row g-3">
+        <div class="col-6 col-md-3">
+            <div class="card bg-dark text-white border-0 overflow-hidden shadow-sm">
+                <img src="images/cow.jpg" class="card-img opacity-50" alt="Electronics">
+                <div class="card-img-overlay d-flex align-items-center justify-content-center">
+                    <h5 class="card-title fw-bold">Electronics</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card bg-dark text-white border-0 overflow-hidden shadow-sm">
+                <img src="images/cow.jpg" class="card-img opacity-50" alt="Fashion">
+                <div class="card-img-overlay d-flex align-items-center justify-content-center">
+                    <h5 class="card-title fw-bold">Fashion</h5>
+                </div>
+            </div>
+        </div>
+        <!-- Add more categories as needed -->
+    </div>
+</section>
+
+<!-- 4. Featured Products (Dynamic Grid) -->
+<section class="container mb-5">
+    <h2 class="fw-bold mb-4 text-center">New Arrivals</h2>
+    <div class="row g-4">
+        @* This would usually be a @foreach loop through your Model *@
+        @for (int i = 1; i <= 4; i++)
+        {
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm product-card">
+                    <div class="position-absolute top-0 start-0 m-3">
+                        <span class="badge bg-danger">Sale</span>
+                    </div>
+                    <img src="images/cow.jpg" class="card-img-top" alt="Product">
+                    <div class="card-body text-center">
+                        <p class="text-muted small mb-1">Category</p>
+                        <h6 class="card-title mb-2">Cool Product #@i</h6>
+                        <div class="mb-2">
+                            <span class="text-primary fw-bold">$49.99</span>
+                            <span class="text-muted text-decoration-line-through small">$79.99</span>
+                        </div>
+                        <div class="d-grid">
+                            <button class="btn btn-outline-primary btn-sm rounded-pill">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
