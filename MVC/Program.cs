@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using MVC.Data;
 using MVC.Models;
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +7,17 @@ builder.Services.AddDbContext<MVCContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddValidation();
 var app = builder.Build();
+var supportedCultures = new[] { "en-US" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
 
-using (var scope = app.Services.CreateScope()) { 
+app.UseRequestLocalization(localizationOptions);
+using (var scope = app.Services.CreateScope())
+{
     var servces = scope.ServiceProvider;
     SeedData.Initialize(servces);
 }
