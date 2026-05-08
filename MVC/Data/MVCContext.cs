@@ -15,5 +15,7 @@ namespace MVC.Data
         }
         public DbSet<MVC.Models.Category> Category { get; set; } = default!;
         public DbSet<MVC.Models.Product> Product { get; set; } = default!;
+        public DbSet<MVC.Models.AIModel> AIModel { get; set; } = default!;
+        public DbSet<MVC.Models.User> User { get; set; } = default!;
     }
 }

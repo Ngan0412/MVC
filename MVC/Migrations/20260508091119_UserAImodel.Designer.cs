@@ -4,6 +4,7 @@ using MVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC.Migrations
 {
     [DbContext(typeof(MVCContext))]
-    partial class MVCContextModelSnapshot : ModelSnapshot
+    [Migration("20260508091119_UserAImodel")]
+    partial class UserAImodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,16 +36,11 @@ namespace MVC.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailRegisted")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModelName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RemainingQuantity")
@@ -120,33 +118,34 @@ namespace MVC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AIModelId")
+                    b.Property<int>("AssignedModelId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FacebookLink")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Zalo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AIModelId");
+                    b.HasIndex("AssignedModelId");
 
                     b.ToTable("User");
                 });
@@ -164,18 +163,18 @@ namespace MVC.Migrations
 
             modelBuilder.Entity("MVC.Models.User", b =>
                 {
-                    b.HasOne("MVC.Models.AIModel", "AIModel")
-                        .WithMany("Users")
-                        .HasForeignKey("AIModelId")
+                    b.HasOne("MVC.Models.AIModel", "AssignedModel")
+                        .WithMany("UserList")
+                        .HasForeignKey("AssignedModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AIModel");
+                    b.Navigation("AssignedModel");
                 });
 
             modelBuilder.Entity("MVC.Models.AIModel", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("UserList");
                 });
 
             modelBuilder.Entity("MVC.Models.Category", b =>
