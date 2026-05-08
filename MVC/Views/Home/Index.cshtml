@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -63,23 +65,17 @@
         <a asp-controller="Shop" asp-action="Categories" class="text-primary">View All</a>
     </div>
     <div class="row g-3">
-        <div class="col-6 col-md-3">
-            <div class="card bg-dark text-white border-0 overflow-hidden shadow-sm">
-                <img src="images/cow.jpg" class="card-img opacity-50" alt="Electronics">
-                <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                    <h5 class="card-title fw-bold">Electronics</h5>
+        @foreach (var category in Model.Categories)
+        {
+            <div class="col-6 col-md-3">
+                <div class="card bg-dark text-white border-0 overflow-hidden shadow-sm">
+                    <img src="images/cow.jpg" class="card-img opacity-50" alt="Electronics">
+                    <div class="card-img-overlay d-flex align-items-center justify-content-center">
+                        <h5 class="card-title fw-bold">@category.Name</h5>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card bg-dark text-white border-0 overflow-hidden shadow-sm">
-                <img src="images/cow.jpg" class="card-img opacity-50" alt="Fashion">
-                <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                    <h5 class="card-title fw-bold">Fashion</h5>
-                </div>
-            </div>
-        </div>
-        <!-- Add more categories as needed -->
+        }  
     </div>
 </section>
 
@@ -88,19 +84,19 @@
     <h2 class="fw-bold mb-4 text-center">New Arrivals</h2>
     <div class="row g-4">
         @* This would usually be a @foreach loop through your Model *@
-        @for (int i = 1; i <= 4; i++)
+        @foreach (var product in Model.FeaturedProducts)
         {
             <div class="col-md-3">
                 <div class="card h-100 border-0 shadow-sm product-card">
                     <div class="position-absolute top-0 start-0 m-3">
                         <span class="badge bg-danger">Sale</span>
                     </div>
-                    <img src="images/cow.jpg" class="card-img-top" alt="Product">
+                    <img src="@(product.ImageUrl)" class="card-img-top" alt="Product">
                     <div class="card-body text-center">
-                        <p class="text-muted small mb-1">Category</p>
-                        <h6 class="card-title mb-2">Cool Product #@i</h6>
+                        <p class="text-muted small mb-1">@product.Category?.Name</p>
+                        <h6 class="card-title mb-2">Cool Product </h6>
                         <div class="mb-2">
-                            <span class="text-primary fw-bold">$49.99</span>
+                            <span class="text-primary fw-bold">@product.Price</span>
                             <span class="text-muted text-decoration-line-through small">$79.99</span>
                         </div>
                         <div class="d-grid">

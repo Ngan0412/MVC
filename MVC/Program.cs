@@ -16,11 +16,6 @@ var localizationOptions = new RequestLocalizationOptions()
     .AddSupportedUICultures(supportedCultures);
 
 app.UseRequestLocalization(localizationOptions);
-using (var scope = app.Services.CreateScope())
-{
-    var servces = scope.ServiceProvider;
-    SeedData.Initialize(servces);
-}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

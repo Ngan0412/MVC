@@ -13,7 +13,7 @@ namespace MVC.Data
             : base(options)
         {
         }
-
-        public DbSet<MVC.Models.Movie> Movie { get; set; } = default!;
+        public DbSet<MVC.Models.Category> Category { get; set; } = default!;
+        public DbSet<MVC.Models.Product> Product { get; set; } = default!;
     }
 }

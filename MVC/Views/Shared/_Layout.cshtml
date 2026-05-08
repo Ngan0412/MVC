@@ -42,8 +42,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="catDrop" data-bs-toggle="dropdown">Categories</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-id="electronics">Electronics</a></li>
-                                <li><a class="dropdown-item" asp-controller="Shop" asp-action="Category" asp-route-id="fashion">Fashion</a></li>
+                                @await Component.InvokeAsync("CategoryMenu")
                             </ul>
                         </li>
                     </ul>
