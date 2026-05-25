@@ -2,7 +2,7 @@
 
 namespace MVC.Controllers
 {
-    public class CartsController : Controller
+    public class CartController : Controller
     {
         [HttpPost]
         public IActionResult AddToCart(int productId)
@@ -18,6 +18,11 @@ namespace MVC.Controllers
                 message = "Đã thêm sản phẩm vào giỏ hàng thành công!",
                 cartCount = currentCartCount
             });
+        }
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
         }
     }
 }

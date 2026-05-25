@@ -112,7 +112,7 @@
 <script>
         function addToCart(idChon) {
         // Gửi yêu cầu ngầm lên server
-        fetch('/Carts/AddToCart', {
+        fetch('/Cart/AddToCart', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'productId=' + idChon
