@@ -100,7 +100,7 @@
                             <span class="text-muted text-decoration-line-through small">$79.99</span>
                         </div>
                         <div class="d-grid">
-                            <button class="btn btn-outline-primary btn-sm rounded-pill">Add to Cart</button>
+                            <button onclick="addToCart(@product.Id)" class="btn btn-outline-primary btn-sm rounded-pill">Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -108,3 +108,24 @@
         }
     </div>
 </section>
+
+<script>
+        function addToCart(idChon) {
+        // Gửi yêu cầu ngầm lên server
+        fetch('/Carts/AddToCart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'productId=' + idChon
+        })
+        .then(response => response.json()) // Nhận kết quả JSON từ hàm Json() của Controller
+        .then(data => {
+            if (data.success) {
+                // 1. Hiển thị thông báo nhỏ bật lên (Toast notification)
+                alert(data.message);
+
+                // 2. Cập nhật ngay số lượng hiển thị trên Icon giỏ hàng ở Header
+                document.getElementById("cart-badge").innerText = data.cartCount;
+            }
+        });
+    }
+</script>

@@ -65,7 +65,7 @@
                         <!-- Shopping Cart -->
                         <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-dark position-relative ms-2">
                             <i class="bi bi-cart3"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 @* Logic to show cart count from Session/Database *@
                                 0
                             </span>
