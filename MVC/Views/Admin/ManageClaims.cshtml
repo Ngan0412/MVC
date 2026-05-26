@@ -1,0 +1,85 @@
+﻿@model IList<System.Security.Claims.Claim>
+@{
+    ViewData["Title"] = "Quản lý thẻ Claims";
+    // Ép kiểu dữ liệu lấy từ ViewBag để biết đang xử lý cho User nào
+    var user = ViewBag.User as Microsoft.AspNetCore.Identity.IdentityUser;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>🪪 Quản lý Claims của Tài khoản</h2>
+        <a href="/Admin/Index" class="btn btn-sm btn-secondary">Quay lại trang quản trị</a>
+    </div>
+
+    <div class="card my-3 bg-light">
+        <div class="card-body">
+            <p class="mb-1"><strong>User ID:</strong> <span class="text-muted">@user?.Id</span></p>
+            <p class="mb-0"><strong>Email / Tài khoản:</strong> <span class="text-primary fw-bold">@user?.Email</span></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">Cấp thẻ thông tin mới</div>
+                <div class="card-body">
+                    <form asp-action="AddClaim" method="post">
+                        <input type="hidden" name="userId" value="@user?.Id" />
+
+                        <div class="mb-3">
+                            <label class="form-label font-monospace small">Claim Type (Tên loại thẻ)</label>
+                            <input type="text" name="claimType" class="form-control" placeholder="Ví dụ: AgeClaim, FullName, VIP" required />
+                            <div class="form-text small">Tên quy ước để đưa vào tầng lọc Policy.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label font-monospace small">Claim Value (Giá trị ghi trên thẻ)</label>
+                            <input type="text" name="claimValue" class="form-control" placeholder="Ví dụ: 20, Nguyễn Văn A, True" required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Ghi vào bảng AspNetUserClaims</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card border-dark">
+                <div class="card-header bg-dark text-white">Các thẻ Claims đang sở hữu</div>
+                <div class="card-body p-0">
+                    @if (Model == null || Model.Count == 0)
+                    {
+                        <div class="p-4 text-center text-muted">
+                            <i class="bi bi-card-heading fs-2"></i>
+                            <p class="mt-2 mb-0">Tài khoản này chưa được cấp thẻ thông tin nào.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Claim Type (Loại)</th>
+                                        <th>Claim Value (Giá trị)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var claim in Model)
+                                    {
+                                        <tr>
+                                            <td><span class="badge bg-secondary font-monospace">@claim.Type</span></td>
+                                            <td><strong class="text-dark">@claim.Value</strong></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

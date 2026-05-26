@@ -1,0 +1,90 @@
+﻿@model List<Microsoft.AspNetCore.Identity.IdentityUser>
+@{
+    ViewData["Title"] = "Trang Quản Trị Hệ Thống";
+    var allRoles = ViewBag.Roles as List<Microsoft.AspNetCore.Identity.IdentityRole>;
+}
+
+<div class="container mt-4">
+    <h2>🛠️ Khu Vực Thực Hành Identity Tables</h2>
+    <hr />
+
+    <div class="card mb-4 border-primary">
+        <div class="card-header bg-primary text-white">Tạo vai trò mới (Ghi vào bảng AspNetRoles)</div>
+        <div class="card-body">
+            <form asp-action="CreateRole" method="post" class="row g-3">
+                <div class="col-auto">
+                    <input type="text" name="roleName" class="form-control" placeholder="Ví dụ: Moderator, Staff" required />
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Thêm Vào Bảng Roles</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-dark text-white">Danh sách tài khoản (Bảng AspNetUsers)</div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Email / UserName</th>
+                        <th>Trạng thái thuộc tính khóa (LockoutEnd)</th>
+                        <th>Hành động thực hành</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td><strong>@user.Email</strong></td>
+                            <td>
+                                @if (user.LockoutEnd > DateTimeOffset.UtcNow)
+                                {
+                                    <span class="badge bg-danger">Đang bị khóa đến: @user.LockoutEnd</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Hoạt động bình thường</span>
+                                }
+                            </td>
+                            <td>
+                                <form asp-action="AssignRole" method="post" class="d-inline-block me-2">
+                                    <input type="hidden" name="userId" value="@user.Id" />
+                                    <div class="input-group input-group-sm">
+                                        <select name="roleName" class="form-select form-select-sm">
+                                            @foreach (var r in allRoles!)
+                                            {
+                                                <option value="@r.Name">@r.Name</option>
+                                            }
+                                        </select>
+                                        <button class="btn btn-outline-dark" type="submit">Gán Role</button>
+                                    </div>
+                                </form>
+
+                                <a href="/Admin/ManageClaims?userId=@user.Id" class="btn btn-sm btn-info text-white">
+                                    <i class="bi bi-card-text"></i> Phát Thẻ Claims
+                                </a>
+
+                                @if (user.LockoutEnd > DateTimeOffset.UtcNow)
+                                {
+                                    <form asp-action="UnlockUser" method="post" class="d-inline-block">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <button type="submit" class="btn btn-sm btn-warning">Mở Khóa</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-action="LockUser" method="post" class="d-inline-block">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <button type="submit" class="btn btn-sm btn-danger">Khóa Acc</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
