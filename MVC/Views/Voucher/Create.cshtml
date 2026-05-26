@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Tạo mã giảm giá chiến dịch";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-distmiss="alert"></button>
+                </div>
+            }
+
+            <div class="card border-primary shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">🔑 Khu Vực VIP: Tạo Cấu Hình Voucher</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-warning small py-2">
+                        <i class="bi bi-shield-lock-fill"></i> Bạn đang truy cập với tư cách: <br />
+                        <strong>Phòng ban:</strong> @User.FindFirst("Department")?.Value |
+                        <strong>Chức vụ:</strong> @User.FindFirst("Position")?.Value
+                    </div>
+
+                    <form asp-controller="Voucher" asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Mã Giảm Giá (Voucher Code)</label>
+                            <input type="text" name="voucherCode" class="form-control" placeholder="Ví dụ: SUMMER2026" required style="text-transform: uppercase;" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Số tiền giảm (VND)</label>
+                            <input type="number" name="discountAmount" class="form-control" required min="10000" />
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Phê Duyệt & Phát Hành</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

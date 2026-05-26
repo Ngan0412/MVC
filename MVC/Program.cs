@@ -25,14 +25,16 @@ builder.Services.ConfigureApplicationCookie(options => {
 
 // 4. phân quy?n nâng cao (Policy-based)
 builder.Services.AddAuthorization(options => {
-    // ??ng ký 1 Policy tên là "Over18Policy"
-    options.AddPolicy("Over18Policy", policy =>
-        policy.RequireClaim("AgeClaim") // b?t bu?c user ph?i có thông tin tên "AgeClaim"
-              .RequireAssertion(context => {
-                  // Logic ki?m tra: Tu?i l?y t? Claim ph?i >= 18
-                  var ageValue = context.User.FindFirst("AgeClaim")?.Value;
-                  return int.TryParse(ageValue, out int age) && age >= 18;
-              }));
+    options.AddPolicy("MarketingManagerPolicy", policy => 
+    policy.RequireAuthenticatedUser() // ph?i ??ng nh?p
+          .RequireClaim("Department", "Marketing") // ph?i có claim Department v?i giá tr? Marketing
+          .RequireAssertion(context =>
+              {
+                  var positionClaim = context.User.FindFirst("Position")?.Value;
+                  return positionClaim == "Manager" || positionClaim == "Director";
+              }
+          ));
+   
 });
 // Add services to the container.
 builder.Services.AddControllersWithViews();
