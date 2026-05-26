@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Đăng ký tài khoản mới";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Đăng Ký Tài Khoản</h3>
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small fw-bold"></div>
+                    <form asp-controller="Account" asp-action="Register" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ Email</label>
+                            <input type="email" name="email" class="form-control" required placeholder="abc@gmail.com" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu (Tối thiểu 6 ký tự)</label>
+                            <input type="password" name="password" class="form-control" required placeholder="******" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Số tuổi</label>
+                            <input type="number" name="age" class="form-control" required min="1" max="120" placeholder="Ví dụ: 20" />
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success">Tạo Tài Khoản</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p class="small mb-0">Đã có tài khoản? <a href="/Account/Login">Đăng nhập</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
