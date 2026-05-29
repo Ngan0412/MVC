@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Test Dependency Injection Lifetimes";
+}
+
+<div class="container mt-4">
+    <h2>Kiểm tra Vòng đời Dependency Injection</h2>
+    <p class="text-muted">F5 (Reload trang) để gửi một Request mới và quan sát sự thay đổi của các mã GUID.</p>
+    <hr />
+
+    <table class="table table-bordered text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>Loại Lifetime</th>
+                <th>Lần gọi 1 (Trong MainService)</th>
+                <th>Lần gọi 2 (Trong Controller)</th>
+                <th>Kết luận</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-danger">
+                <td><strong>Transient</strong></td>
+                <td>@ViewBag.Transient_Call1</td>
+                <td>@ViewBag.Transient_Call2</td>
+                <td><span class="badge bg-danger">Khác nhau</span> <br><small>Tạo mới mọi lúc</small></td>
+            </tr>
+            <tr class="table-warning">
+                <td><strong>Scoped</strong></td>
+                <td>@ViewBag.Scoped_Call1</td>
+                <td>@ViewBag.Scoped_Call2</td>
+                <td><span class="badge bg-success">Giống nhau</span> <br><small>Dùng chung trong 1 Request</small></td>
+            </tr>
+            <tr class="table-success">
+                <td><strong>Singleton</strong></td>
+                <td>@ViewBag.Singleton_Call1</td>
+                <td>@ViewBag.Singleton_Call2</td>
+                <td><span class="badge bg-success">Giống nhau</span> <br><small>Cả ứng dụng dùng chung</small></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

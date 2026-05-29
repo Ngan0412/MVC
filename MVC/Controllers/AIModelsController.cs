@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace MVC.Controllers;
 
-[Authorize(Roles = "Admin")]
 
 public class AIModelsController : Controller
 {
@@ -57,7 +56,7 @@ public class AIModelsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,ModelName,EmailRegisted,Description,CreatedDate,ExpiryDate,TotalQuantity,RemainingQuantity")] AIModel aIModel)
+    public async Task<IActionResult> Create(AIModel aIModel)
     {
         if (ModelState.IsValid)
         {

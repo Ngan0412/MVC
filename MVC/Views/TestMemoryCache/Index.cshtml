@@ -1,0 +1,40 @@
+﻿@using MVC.Controllers
+@model List<ProductMemory>
+
+@{
+    ViewData["Title"] = "Demo In-Memory Cache";
+}
+
+<div class="container mt-4">
+    <h2>Danh sách sản phẩm Demo Cache</h2>
+
+    <div class="alert alert-info mt-3">
+        <p><strong>Nguồn dữ liệu:</strong> @ViewBag.DataSource</p>
+        <p><strong>Thời gian tải:</strong> <span class="badge bg-danger">@ViewBag.ExecutionTime ms</span></p>
+    </div>
+
+    <table class="table table-bordered mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>$@item.Price</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-primary">F5 / Tải lại trang</a>
+        <a asp-action="ClearCache" class="btn btn-warning">Chủ động xóa Cache</a>
+    </div>
+</div>

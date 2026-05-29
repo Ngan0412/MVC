@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace MVC.Controllers;
@@ -39,7 +40,7 @@ public class AccountController : Controller
 
     // [POST] Tiếp nhận dữ liệu gửi lên từ Form Đăng Ký và xử lý lưu vào Database
     [HttpPost]
-    public async Task<IActionResult> Register(string email, string password, int age)
+    public async Task<IActionResult> Register(string email, string password, int age, string fullName, string avatarUrl)
     {
         var user = new IdentityUser { UserName = email, Email = email };
         var result = await _userManager.CreateAsync(user, password);
@@ -48,6 +49,8 @@ public class AccountController : Controller
         {
             // Thêm các thông tin bổ sung (Claims) vào User này để phục vụ Policy về sau
             await _userManager.AddClaimAsync(user, new Claim("AgeClaim", age.ToString()));
+            await _userManager.AddClaimAsync(user, new Claim("FullName", fullName));
+            await _userManager.AddClaimAsync(user, new Claim("AvatarUrl", avatarUrl));
 
             // Gán luôn vai trò mặc định là "User"
             if (!await _roleManager.RoleExistsAsync("User"))
@@ -153,6 +156,38 @@ public class AccountController : Controller
         {
             ModelState.AddModelError("", error.Description);
         }
+        return View();
+    }
+    [HttpGet]
+    public async Task<IActionResult> Profile()
+    {
+        // --- ❌ CÁCH 1: TRUY VẤN DATABASE TRUYỀN THỐNG ---
+        var watchDb = Stopwatch.StartNew();
+
+        // Hệ thống bắt buộc phải kết nối xuống ổ đĩa DB, tìm kiếm User
+        var userId = _userManager.GetUserId(User);
+        var userFromDb = await _userManager.FindByIdAsync(userId);
+        // Giả sử lấy tiếp các Claim của User dưới DB (Phải tốn thêm 1 lệnh SQL phụ)
+        var dbClaims = await _userManager.GetClaimsAsync(userFromDb);
+        var fullNameFromDb = dbClaims.FirstOrDefault(c => c.Type == "FullName")?.Value;
+
+        watchDb.Stop();
+        // Lưu lại thời gian tốn lội xuống DB (tính bằng mili-giây)
+        ViewBag.DbTime = watchDb.Elapsed.TotalMilliseconds;
+
+
+        // --- 🟢 CÁCH 2: DÙNG CLAIMS TRÊN RAM (SIÊU TỐC) ---
+        var watchRam = Stopwatch.StartNew();
+
+        // Không thèm gọi DB! Đọc trực tiếp từ đối tượng 'User' đã được Middleware giải mã sẵn trên RAM
+        var fullNameFromRam = User.FindFirst("FullName")?.Value;
+        var avatarFromRam = User.FindFirst("AvatarUrl")?.Value;
+        var levelFromRam = User.FindFirst("MemberLevel")?.Value;
+
+        watchRam.Stop();
+        // Lưu lại thời gian đọc từ RAM (tính bằng mili-giây)
+        ViewBag.RamTime = watchRam.Elapsed.TotalMilliseconds;
+
         return View();
     }
 }
