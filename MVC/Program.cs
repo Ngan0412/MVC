@@ -49,7 +49,6 @@ builder.Services.AddTransient<ITransientService, TransientService>();
 builder.Services.AddScoped<IScopedService, ScopedService>();
 builder.Services.AddSingleton<ISingletonService, SingletonService>();
 builder.Services.AddScoped<ITestDIService, TestDIService>();
-builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
 
 var app = builder.Build();
 var supportedCultures = new[] { "en-US" };

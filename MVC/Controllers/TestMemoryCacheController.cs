@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using MVC.Models;
+using MVC.Services;
 using System.Diagnostics;
 
 namespace MVC.Controllers;
@@ -19,43 +20,15 @@ public class TestMemoryCacheController : Controller
     {
         string cacheKey = "product_list_key";
 
-        // Dùng Stopwatch để đo tốc độ phản hồi hiển thị ra View
-        var stopwatch = Stopwatch.StartNew();
-        string dataSource;
-
-        // BƯỚC CHÍNH: Thử lấy dữ liệu từ Cache ra trước
-        // Nếu tìm thấy (true), dữ liệu sẽ nạp thẳng vào biến 'products'
-        if (!_memoryCache.TryGetValue(cacheKey, out List<ProductMemory>? products))
-        {
-            // NẾU CACHE TRỐNG (CACHE MISS):
-            dataSource = "Database gốc (Mất 3 giây xử lý)";
-
-            // 1. Đi lấy dữ liệu gốc từ Service/DB
-            products = await _productService.GetProductsFromDatabaseAsync();
-
-            // 2. Thiết lập cấu hình (Thời gian sống) cho Cache này
-            var cacheOptions = new MemoryCacheEntryOptions()
-                // Hết hạn tuyệt đối sau 1 phút kể từ khi tạo (bắt buộc xóa để làm mới)
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(1))
-                // Hết hạn trượt: Nếu trong vòng 20 giây không có ai xem trang, tự động xóa sớm
-                .SetSlidingExpiration(TimeSpan.FromSeconds(20))
-                // Độ ưu tiên giữ lại trong RAM nếu server bị nghẽn/thiếu RAM
-                .SetPriority(CacheItemPriority.High);
-
-            // 3. Nạp dữ liệu vào lại Cache để lần sau dùng
-            _memoryCache.Set(cacheKey, products, cacheOptions);
-        }
-        else
-        {
-            // NẾU TÌM THẤY TRONG CACHE (CACHE HIT):
-            dataSource = "RAM - In-Memory Cache (Tốc độ ánh sáng)";
-        }
-
-        stopwatch.Stop();
-
-        // Truyền các thông tin đo đạc ra giao diện xem chơi
-        ViewBag.ExecutionTime = stopwatch.ElapsedMilliseconds;
-        ViewBag.DataSource = dataSource;
+        // Controller chỉ việc gọi hàm, truyền Key, thời gian và Hàm lấy DB gốc
+        var products = await _memoryCache.GetOrCreateAsync(
+            cacheKey,
+            async entry => {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30); // Cache sẽ tự động hết hạn sau 30 giây
+                entry.Priority = CacheItemPriority.Normal; // Đặt mức độ ưu tiên cho cache (tùy chọn)
+                return await _productService.GetProductsFromDatabaseAsync(); // Hàm này sẽ chỉ được gọi khi cache hết hạn hoặc chưa tồn tại, giúp giảm tải cho Database
+            }
+        );
 
         return View(products);
     }
